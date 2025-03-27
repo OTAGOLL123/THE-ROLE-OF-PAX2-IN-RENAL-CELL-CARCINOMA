@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Count reads mapped to genomic features using featureCounts
+
+# Define input and output paths
+gtf_file=./annotation.gtf                     # Reference annotation in GTF format
+output_file=./counts/featurecounts_matrix.txt # Output count matrix
+input_dir=./bam_sorted                        # Directory containing sorted BAM files
+
+# Create output directory if it doesn't exist
+mkdir -p $(dirname "$output_file")
+
+# Run featureCounts
+featureCounts \
+  -T 16 \                                     # Number of threads
+  -t exon \                                   # Feature type to count
+  -g gene_id \                                # Attribute type to group features
+  -a "$gtf_file" \                            # Annotation file
+  -o "$output_file" \                         # Output file
+  ${input_dir}/*.sorted.bam                   # Input BAM files

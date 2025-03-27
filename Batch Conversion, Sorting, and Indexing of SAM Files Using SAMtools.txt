@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Convert SAM files to sorted and indexed BAM files using SAMtools
+
+# Define input and output directories
+input_dir=./sam_files
+output_dir=./bam_sorted
+
+# Create output directory if it doesn't exist
+mkdir -p $output_dir
+
+# Loop through all SAM files in the input directory
+for sam_file in ${input_dir}/*.sam; do
+  base_name=$(basename "$sam_file" .sam)
+
+  # Step 1: Convert SAM to BAM
+  samtools view \
+    -@ 8 \
+    -b "$sam_file" \
+    > ${output_dir}/${base_name}.bam
+
+  # Step 2: Sort BAM
+  samtools sort \
+    -@ 16 \
+    ${output_dir}/${base_name}.bam \
+    > ${output_dir}/${base_name}.sorted.bam
+
+  # Step 3: Index BAM
+  samtools index \
+    ${output_dir}/${base_name}.sorted.bam
+
+done

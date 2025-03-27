@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Indexing a reference genome for alignment using HISAT2
+
+# Define input and output file paths
+ref_fasta=./reference.fa             # Input: Reference genome in FASTA format
+index_prefix=./reference_index       # Output: Prefix for the generated index files
+
+# Run HISAT2 index builder
+hisat2-build \
+  -p 12 \                            # Number of CPU threads
+  $ref_fasta \                       # Input FASTA file
+  $index_prefix \                    # Output index file prefix
+  1>hisat2-build.log \               # Redirect standard output to log file
+  2>hisat2-build.err                 # Redirect error output to error log

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Batch processing of high-throughput sequencing data in FASTQ format
+# This script uses fastp to perform quality control and generate summary reports
+
+# Loop through all .fastq.gz files in the current directory
+for sample in $(ls *.fastq.gz | sed 's/.fastq.gz//'); do
+
+  # Run fastp for quality control
+  fastp \
+    -w 10 \                                # Number of threads
+    -i ${sample}.fastq.gz \               # Input file
+    -o ${sample}.clean.fastq.gz \         # Output (cleaned) file
+    -h ${sample}.fastp.html \             # HTML quality report
+    -j ${sample}.fastp.json               # JSON quality report
+
+done
